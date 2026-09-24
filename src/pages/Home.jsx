@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import TweetList from "../components/TweetList";
 import TweetForm from "../components/TweetForm";
 
@@ -33,22 +34,21 @@ const Home = ({ user, logout }) => {
   };
 
   return (
-    <div>
-      <h1>Bienvenido a Twitter</h1>
-      {user ? (
-        <div>
-          <p>Hola, {user.username}!</p>
-          <Link to="/profile">Mi perfil</Link>{" "}
-          <button onClick={logout}>Cerrar sesión</button>
+    <>
+      <Navbar user={user} logout={logout} />
+      <main>
+        {user ? (
           <TweetForm onAddTweet={addTweet} />
-        </div>
-      ) : (
-        <p>
-          <Link to="/login">Inicia sesión</Link> para publicar tweets.
-        </p>
-      )}
-      <TweetList tweets={tweets} onLike={likeTweet} />
-    </div>
+        ) : (
+          <div className="card notice">
+            <p>
+              <Link to="/login">Inicia sesión</Link> para publicar tweets.
+            </p>
+          </div>
+        )}
+        <TweetList tweets={tweets} onLike={likeTweet} />
+      </main>
+    </>
   );
 };
 

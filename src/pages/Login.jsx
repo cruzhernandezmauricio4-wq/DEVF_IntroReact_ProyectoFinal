@@ -17,20 +17,27 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Iniciar sesión</h1>
-      <input
-        type="text"
-        placeholder="Nombre de usuario"
-        value={username}
-        onChange={(e) => {
-          setUsername(e.target.value);
-          setError("");
-        }}
-      />
-      <button type="submit">Iniciar sesión</button>
-      {error && <p role="alert">{error}</p>}
-    </form>
+    <div className="login-page">
+      <form className="card login-card" onSubmit={handleSubmit}>
+        <div className="login-logo">🐦</div>
+        <h1>Inicia sesión</h1>
+        <p className="muted">Elige un nombre de usuario para entrar.</p>
+        <input
+          type="text"
+          placeholder="Nombre de usuario"
+          value={username}
+          autoFocus
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setError("");
+          }}
+        />
+        {error && <p role="alert">{error}</p>}
+        <button className="btn" type="submit">
+          Entrar
+        </button>
+      </form>
+    </div>
   );
 };
 

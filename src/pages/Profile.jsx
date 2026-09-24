@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Tweet from "../components/Tweet";
 
 const Profile = ({ user, logout }) => {
   const myTweets = (JSON.parse(localStorage.getItem("tweets")) || []).filter(
@@ -6,24 +7,33 @@ const Profile = ({ user, logout }) => {
   );
 
   return (
-    <div>
-      <h1>Perfil</h1>
-      <p>Nombre de usuario: {user.username}</p>
-      <Link to="/">Volver al inicio</Link>{" "}
-      <button onClick={logout}>Cerrar sesión</button>
-
-      <h2>Mis tweets</h2>
-      {myTweets.length === 0 ? (
-        <p>Aún no has publicado tweets.</p>
-      ) : (
-        myTweets.map((tweet) => (
-          <div className="tweet" key={tweet.id}>
-            <p>{tweet.text}</p>
-            <span>❤ {tweet.likes}</span>
+    <>
+      <Navbar user={user} logout={logout} />
+      <main>
+        <section className="card profile-header">
+          <div className="avatar avatar-lg">
+            {user.username[0].toUpperCase()}
           </div>
-        ))
-      )}
-    </div>
+          <div>
+            <h1>@{user.username}</h1>
+            <p className="muted">
+              {myTweets.length} {myTweets.length === 1 ? "tweet" : "tweets"}
+            </p>
+          </div>
+        </section>
+
+        <h2>Mis tweets</h2>
+        {myTweets.length === 0 ? (
+          <p className="empty">Aún no has publicado tweets.</p>
+        ) : (
+          <div className="card tweet-list">
+            {myTweets.map((tweet) => (
+              <Tweet key={tweet.id} tweet={tweet} />
+            ))}
+          </div>
+        )}
+      </main>
+    </>
   );
 };
 

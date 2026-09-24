@@ -1,14 +1,17 @@
 :root {
   --text: #0f1419;
   --muted: #536471;
-  --bg: #fff;
-  --surface: #f7f9f9;
-  --border: #eff3f4;
+  --bg: #f0f3f5;
+  --card: #fff;
+  --border: #e6ecf0;
   --accent: #1d9bf0;
   --accent-hover: #1a8cd8;
+  --accent-soft: rgba(29, 155, 240, 0.1);
   --like: #f91880;
+  --like-soft: rgba(249, 24, 128, 0.1);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
 
-  font: 16px/1.4 system-ui, "Segoe UI", Roboto, sans-serif;
+  font: 16px/1.5 system-ui, "Segoe UI", Roboto, sans-serif;
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
@@ -17,34 +20,40 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #e7e9ea;
-    --muted: #71767b;
-    --bg: #000;
-    --surface: #16181c;
+    --muted: #8b98a5;
+    --bg: #0b0d0f;
+    --card: #16181c;
     --border: #2f3336;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   }
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background: var(--bg);
 }
 
 #root {
-  max-width: 600px;
   min-height: 100svh;
-  margin: 0 auto;
-  padding: 0 16px;
-  box-sizing: border-box;
-  border-inline: 1px solid var(--border);
 }
 
 h1 {
   font-size: 22px;
-  margin: 16px 0;
+  margin: 0;
 }
 
 h2 {
-  font-size: 18px;
-  margin: 24px 0 8px;
+  font-size: 16px;
+  color: var(--muted);
+  margin: 24px 4px 12px;
+}
+
+p {
+  margin: 0;
 }
 
 a {
@@ -56,70 +65,270 @@ a:hover {
   text-decoration: underline;
 }
 
-input {
-  font: inherit;
-  color: inherit;
-  background: var(--surface);
-  padding: 10px 12px;
+.muted {
+  color: var(--muted);
+}
+
+/* ---------- Layout ---------- */
+
+main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+.card {
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  margin-right: 8px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
 }
 
-input:focus {
-  outline: 2px solid var(--accent);
-  border-color: transparent;
+.empty,
+.notice {
+  text-align: center;
+  color: var(--muted);
+  padding: 32px 16px;
 }
 
-button {
+.notice {
+  margin-bottom: 16px;
+  padding: 20px;
+}
+
+/* ---------- Navbar ---------- */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px max(16px, calc((100% - 600px) / 2));
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.navbar nav a {
+  color: var(--muted);
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.navbar nav a:hover {
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+
+.navbar nav a.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
   font: inherit;
   font-weight: 600;
   color: #fff;
   background: var(--accent);
-  padding: 8px 16px;
-  border: 0;
+  padding: 8px 20px;
+  border: 1px solid transparent;
   border-radius: 999px;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
-button:hover {
+.btn:hover:not(:disabled) {
   background: var(--accent-hover);
 }
 
-form {
-  margin: 16px 0;
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-form input {
-  width: min(280px, 60%);
+.btn-outline {
+  color: var(--text);
+  background: transparent;
+  border-color: var(--border);
+  padding: 6px 14px;
+  margin-left: 4px;
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--like-soft);
+  color: var(--like);
+}
+
+/* ---------- Formulario de tweet ---------- */
+
+.tweet-form {
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+textarea,
+input[type="text"] {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+textarea {
+  resize: none;
+}
+
+textarea:focus,
+input[type="text"]:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: transparent;
+}
+
+.tweet-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.counter {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- Tweets ---------- */
+
+.tweet-list {
+  overflow: hidden;
 }
 
 .tweet {
-  padding: 12px 0;
+  display: flex;
+  gap: 12px;
+  padding: 16px;
   border-bottom: 1px solid var(--border);
 }
 
-.tweet p {
-  margin: 0 0 8px;
+.tweet:last-child {
+  border-bottom: 0;
+}
+
+.tweet-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.tweet-author {
+  font-weight: 700;
+}
+
+.tweet-body p {
+  margin: 2px 0 8px;
   overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
-.tweet button {
-  color: var(--like);
+.like {
+  font: inherit;
+  font-size: 14px;
+  color: var(--muted);
   background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 10px 4px 0;
+}
+
+button.like {
+  cursor: pointer;
   padding: 4px 10px;
-  font-weight: 500;
+  margin-left: -10px;
 }
 
-.tweet button:hover {
-  background: rgba(249, 24, 128, 0.1);
-}
-
-.tweet span {
+button.like:hover {
   color: var(--like);
+  background: var(--like-soft);
+}
+
+.avatar {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #1d9bf0, #7856ff);
+  border-radius: 50%;
+}
+
+.avatar-lg {
+  width: 72px;
+  height: 72px;
+  font-size: 28px;
+}
+
+/* ---------- Perfil ---------- */
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+}
+
+/* ---------- Login ---------- */
+
+.login-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.login-logo {
+  font-size: 40px;
+}
+
+.login-card .btn {
+  padding: 10px 20px;
 }
 
 [role="alert"] {
   color: var(--like);
-  margin: 8px 0 0;
+  font-size: 14px;
 }
