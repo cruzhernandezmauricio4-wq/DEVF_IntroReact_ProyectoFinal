@@ -1,21 +1,41 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { verifyUser } from "../utils/auth";
+import { registerUser } from "../utils/auth";
 
-const Login = ({ onLogin }) => {
+const MIN_USERNAME = 3;
+const MIN_PASSWORD = 6;
+
+const Register = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const registeredName = await verifyUser(username.trim(), password);
-    if (!registeredName) {
-      setError("Usuario o contraseña incorrectos.");
+    const name = username.trim();
+
+    if (name.length < MIN_USERNAME) {
+      setError(`El usuario debe tener al menos ${MIN_USERNAME} caracteres.`);
       return;
     }
-    onLogin(registeredName);
+    if (password.length < MIN_PASSWORD) {
+      setError(`La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`);
+      return;
+    }
+    if (password !== confirm) {
+      setError("Las contraseñas no coinciden.");
+      return;
+    }
+
+    const registerError = await registerUser(name, password);
+    if (registerError) {
+      setError(registerError);
+      return;
+    }
+
+    onLogin(name);
     navigate("/");
   };
 
@@ -23,7 +43,7 @@ const Login = ({ onLogin }) => {
     <div className="login-page">
       <form className="card login-card" onSubmit={handleSubmit}>
         <div className="login-logo">🐦</div>
-        <h1>Inicia sesión</h1>
+        <h1>Crea tu cuenta</h1>
         <input
           type="text"
           placeholder="Nombre de usuario"
@@ -43,16 +63,25 @@ const Login = ({ onLogin }) => {
             setError("");
           }}
         />
+        <input
+          type="password"
+          placeholder="Confirmar contraseña"
+          value={confirm}
+          onChange={(e) => {
+            setConfirm(e.target.value);
+            setError("");
+          }}
+        />
         {error && <p role="alert">{error}</p>}
         <button className="btn" type="submit">
-          Entrar
+          Registrarme
         </button>
         <p className="muted">
-          ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
         </p>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Register;

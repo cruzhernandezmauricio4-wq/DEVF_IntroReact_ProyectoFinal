@@ -8,6 +8,7 @@ import {
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const App = () => {
   // Se lee localStorage al inicializar el estado (no en un useEffect) para que
@@ -32,7 +33,16 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login onLogin={login} />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <Login onLogin={login} />}
+        />
+        <Route
+          path="/register"
+          element={
+            user ? <Navigate to="/" replace /> : <Register onLogin={login} />
+          }
+        />
         <Route path="/" element={<Home user={user} logout={logout} />} />
         <Route
           path="/profile"

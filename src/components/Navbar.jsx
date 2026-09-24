@@ -18,7 +18,10 @@ const Navbar = ({ user, logout }) => {
             </button>
           </>
         ) : (
-          <NavLink to="/login">Iniciar sesión</NavLink>
+          <>
+            <NavLink to="/login">Iniciar sesión</NavLink>
+            <NavLink to="/register">Registrarse</NavLink>
+          </>
         )}
       </nav>
     </header>
